@@ -42,6 +42,6 @@ def user_upload_avatar_controller(uid):
     file.save(finalFilePath)
     return obj.user_upload_avatar_model(uid,finalFilePath)
 
-@app.route("/user/<id>")
-def user_getuser_controller(id):
-    return obj.user_getuser_model(id)
+@app.route("/user/login",methods=["POST"])
+def user_login_controller():
+    return obj.user_login_model(request.form)

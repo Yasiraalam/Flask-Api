@@ -1,6 +1,8 @@
 import mysql.connector
 import json
 from flask import make_response
+from datetime import datetime, timedelta
+import jwt
 
 
 class user_model():
@@ -78,12 +80,17 @@ class user_model():
         else:
             return make_response({"message":"Nothing to Update"},202)
         
-    def user_getuser_model(self,id):
+    def user_login_model(self,data):
         # put Query  execution code
-        self.cur.execute(f"SELECT * FROM students WHERE id={id}")
+        self.cur.execute(f"SELECT id,student_name,email,phone,semister,avatar,role_id FROM students WHERE email ='{data['email']}' and password ='{data['password']}'")
         result = self.cur.fetchall()
-        if len(result)>0:
-                return make_response({"user":result})
-        else:
-            return make_response({"message":"NO user FOUND "},204)
+        userdata = result[0]
+        exp_time = datetime.now() + timedelta(minutes=15)
+        exp_epoch_time = int(exp_time.timestamp())
+        payload = {
+             "payload" : userdata,
+             "exp" : exp_epoch_time
+        }
+        token = jwt.encode(payload,"yasir",algorithm="HS256")
+        return make_response({"token":token},200)
     
