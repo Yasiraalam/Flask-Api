@@ -1,16 +1,21 @@
 from app import app
 from model.user_model import user_model
+from model.auth_model import auth_model
 from flask import request
 from datetime import datetime
 
 obj = user_model()
+auth = auth_model()
 
 # getall user
 @app.route("/user/getall")
+@auth.token_auth("/user/getall")
 def user_getall_controller():
     return obj.user_getall_model()
+
 # add user
 @app.route("/user/adduser",methods=["POST"])
+@auth.token_auth("/user/adduser")
 def user_adduser_controller():
     return obj.user_adduser_model(request.form)
 # update user
