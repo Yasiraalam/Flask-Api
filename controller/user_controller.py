@@ -9,13 +9,13 @@ auth = auth_model()
 
 # getall user
 @app.route("/user/getall")
-@auth.token_auth("/user/getall")
+@auth.token_auth()
 def user_getall_controller():
     return obj.user_getall_model()
 
 # add user
 @app.route("/user/adduser",methods=["POST"])
-@auth.token_auth("/user/adduser")
+@auth.token_auth()
 def user_adduser_controller():
     return obj.user_adduser_model(request.form)
 # update user

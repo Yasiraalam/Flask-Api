@@ -5,22 +5,24 @@ from jwt.exceptions import ExpiredSignatureError
 from functools import wraps
 import jwt
 import re
+from config.config import dbconfig
 
 class auth_model():
 
     def __init__(self):
         try:
-            self.con = mysql.connector.connect(host= "localhost",user ="root",password ="yasir123",database ="university")
+            self.con = mysql.connector.connect(host= dbconfig['hostname'],user =dbconfig['username'],password = dbconfig['password'],database =dbconfig['database'])
             self.con.autocommit=True
             self.cur = self.con.cursor(dictionary = True)
             print("connection Successful")
         except:
             print("Something went wrong")
     
-    def token_auth(self,endpoint):
+    def token_auth(self,endpoint=""):
         def inner1(func):
             @wraps(func)
             def inner2(*args):
+                endpoint = request.url_rule
                 authorization = request.headers.get("authorization")
                 # if re.match("^Bearer *([^]+) *$",authorization,flags=0):
                 if re.match("^Bearer *(.+) *$", authorization, flags=0):

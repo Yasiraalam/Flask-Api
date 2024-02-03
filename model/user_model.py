@@ -3,13 +3,14 @@ import json
 from flask import make_response
 from datetime import datetime, timedelta
 import jwt
+from config.config import dbconfig
 
 
 class user_model():
 
     def __init__(self):
         try:
-            self.con = mysql.connector.connect(host= "localhost",user ="root",password ="yasir123",database ="university")
+            self.con = mysql.connector.connect(host= dbconfig['hostname'],user =dbconfig['username'],password = dbconfig['password'],database =dbconfig['database'])
             self.con.autocommit=True
             self.cur = self.con.cursor(dictionary = True)
             print("connection Successful")
